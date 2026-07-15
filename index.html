@@ -391,6 +391,15 @@ function normKey(str){
   return str.trim().toLowerCase().replace(/\s+/g,' ');
 }
 
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
 function storageKey(base){
   return 'fonte-' + base + '::' + currentProfile;
 }
@@ -506,7 +515,7 @@ function renderAutocompleteInto(inputEl, listEl, query){
   orderedGroups.forEach(g=>{
     html += `<div class="ac-group-label">${g}</div>`;
     byGroup[g].sort().forEach(name=>{
-      html += `<div class="ac-item" data-name="${name}">${name}</div>`;
+      html += `<div class="ac-item" data-name="${escapeHtml(name)}">${escapeHtml(name)}</div>`;
     });
   });
   listEl.innerHTML = html;
@@ -1022,9 +1031,9 @@ function renderExerciseList(){
   const orderedGroups = GROUP_ORDER.filter(g=> byGroup[g]);
   wrap.innerHTML = orderedGroups.map(g=>{
     const chips = byGroup[g].sort((a,b)=>a.localeCompare(b)).map(ex=>
-      `<span class="ex-chip ${ex===selectedExercise?'active':''}" data-ex="${ex}">
-        <span class="chip-label">${ex}</span>
-        <span class="chip-x" data-del="${ex}" title="Retirer de la liste" aria-label="Retirer ${ex} de la liste">×</span>
+      `<span class="ex-chip ${ex===selectedExercise?'active':''}" data-ex="${escapeHtml(ex)}">
+        <span class="chip-label">${escapeHtml(ex)}</span>
+        <span class="chip-x" data-del="${escapeHtml(ex)}" title="Retirer de la liste" aria-label="Retirer ${escapeHtml(ex)} de la liste">×</span>
       </span>`
     ).join('');
     return `<div class="muscle-group"><div class="muscle-label">${g}</div><div class="chip-row">${chips}</div></div>`;
@@ -1058,9 +1067,9 @@ function renderExerciseList(){
       document.getElementById('show-hidden-btn').addEventListener('click', ()=>{ showHidden = true; renderExerciseList(); renderHistory(); });
     }else{
       const chips = hidden.sort((a,b)=>a.localeCompare(b)).map(ex=>
-        `<span class="ex-chip" data-ex="${ex}" style="opacity:0.6;">
-          <span class="chip-label">${ex}</span>
-          <span class="chip-x" data-restore="${ex}" title="Réafficher">↺</span>
+        `<span class="ex-chip" data-ex="${escapeHtml(ex)}" style="opacity:0.6;">
+          <span class="chip-label">${escapeHtml(ex)}</span>
+          <span class="chip-x" data-restore="${escapeHtml(ex)}" title="Réafficher">↺</span>
         </span>`
       ).join('');
       hiddenWrap.innerHTML = `<button type="button" class="hidden-toggle" id="hide-hidden-btn">Masquer la liste</button><div class="chip-row" style="margin-bottom:14px;">${chips}</div>`;
@@ -1229,20 +1238,20 @@ function renderWorkoutHistory(){
         const setsHtmlB = next.sets.map(s=> `<span class="hist-set"><b>${s.weight}kg</b> × ${s.reps}</span>`).join('');
         exRows += `<div class="workout-superset">
           <div class="workout-superset-label">🔗 Superset</div>
-          <div class="workout-exrow"><span class="workout-exname">${e.exercise}</span><span class="hist-sets">${setsHtmlA}</span></div>
-          <div class="workout-exrow"><span class="workout-exname">${next.exercise}</span><span class="hist-sets">${setsHtmlB}</span></div>
+          <div class="workout-exrow"><span class="workout-exname">${escapeHtml(e.exercise)}</span><span class="hist-sets">${setsHtmlA}</span></div>
+          <div class="workout-exrow"><span class="workout-exname">${escapeHtml(next.exercise)}</span><span class="hist-sets">${setsHtmlB}</span></div>
         </div>`;
         i += 2;
       }else{
         const setsHtml = e.sets.map(s=> `<span class="hist-set"><b>${s.weight}kg</b> × ${s.reps}</span>`).join('');
-        exRows += `<div class="workout-exrow"><span class="workout-exname">${e.exercise}</span><span class="hist-sets">${setsHtml}</span></div>`;
+        exRows += `<div class="workout-exrow"><span class="workout-exname">${escapeHtml(e.exercise)}</span><span class="hist-sets">${setsHtml}</span></div>`;
         i += 1;
       }
     }
     return `<div class="workout-card">
       <div class="workout-card-top">
         <div>
-          <div class="workout-name">${w.name}</div>
+          <div class="workout-name">${escapeHtml(w.name)}</div>
           <div class="workout-date">${formatDateFr(w.date)} · ${w.entries.length} exercice(s)</div>
         </div>
         <button type="button" class="btn-del-workout" data-wid="${w.id}" aria-label="Supprimer cette séance">×</button>
