@@ -1,0 +1,13 @@
+{
+  "name": "La Fonte - Suivi de musculation",
+  "short_name": "Fonte",
+  "display": "standalone",
+  "background_color": "#15161a",
+  "theme_color": "#15161a",
+  "start_url": "./suivi-musculation.html",
+  "icons": [
+    { "src": "icone-fonte-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone-fonte-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone-fonte-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
